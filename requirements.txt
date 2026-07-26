@@ -1,0 +1,8 @@
+streamlit
+python-docx
+duckduckgo-search
+groq
+graphviz
+matplotlib
+api2pdf
+python-dotenv
