@@ -39,7 +39,7 @@ def generate_report_content(topic, research_data):
     Use the following research data to inform your report:
     {research_data}
 
-    You must return ONLY a raw JSON object (no markdown formatting, no code blocks) representing the document structure.
+    You must return ONLY a raw JSON array (no markdown formatting, no code blocks) representing the document structure.
 
     The JSON structure must be a list of "elements", where each element is a block in the document.
 
@@ -47,8 +47,15 @@ def generate_report_content(topic, research_data):
     1. "heading": {{"type": "heading", "level": 1|2|3, "text": "Heading Text"}}
     2. "paragraph": {{"type": "paragraph", "text": "Detailed paragraph text."}}
     3. "diagram_mermaid": {{"type": "diagram_mermaid", "code": "mermaid graph TD code here"}}
-    4. "diagram_matplotlib": {{"type": "diagram_matplotlib", "code": "import matplotlib.pyplot as plt\\n... code that saves to 'temp_graph.png'"}}
+    4. "diagram_matplotlib": {{"type": "diagram_matplotlib", "spec": {{"kind": "bar", "x": ["A", "B"], "y": [10, 20], "title": "Comparison", "xlabel": "Category", "ylabel": "Value"}}}}
     5. "diagram_graphviz": {{"type": "diagram_graphviz", "code": "digraph G {{ ... }}"}}
+
+    Matplotlib charts MUST use a data-only spec, never Python or a code field.
+    Allowed kinds: bar, line, scatter, pie. x and y have equal lengths (1-200).
+    y must contain finite numbers; scatter also requires numeric x.
+    Pie values must be nonnegative and sum to more than zero.
+    Titles and labels are optional strings of at most 200 characters.
+    No paths, imports, functions, styles, or other spec fields are allowed.
 
     Include at least one diagram in the report to illustrate a concept.
 
@@ -92,4 +99,4 @@ def generate_report_content(topic, research_data):
         return [
             {"type": "heading", "level": 1, "text": f"Report on {topic}"},
             {"type": "paragraph", "text": f"Error occurred during generation: {str(e)}"},
-        ]
+    ]
